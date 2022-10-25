@@ -63,6 +63,7 @@ class city():
     def __str__(self):
         return {'name': self.name, 'owner': self.owner, 'army': self.army, 'x': self.x, 'y': self.y}
 
+print("change")
 
 
 
