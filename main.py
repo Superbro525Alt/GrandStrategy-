@@ -155,10 +155,11 @@ class game():
             self.players[i].init()
 
 class manager():
-    def __init__(self, settings={}, path='/games/games.pickle'):
+    def __init__(self, settings={}, path='/games/games.pickle', settingsPath='/games/settings.pickle'):
         self.settings = settings
         self.path = sys.path[0] + path
-    def save(self, game):
+        self.settingsPath = sys.path[0] + settingsPath
+    def saveGame(self, game):
         temp = pickle.load(open(self.path, 'wb'))
         k = list(temp.keys())
         v = list(temp.values())
@@ -169,13 +170,17 @@ class manager():
         temp = dict(zip(k, v))
         pickle.dump(temp, open(self.path, 'wb'))
 
-    def load(self, name):
+    def loadGame(self, name):
         return pickle.load(open(self.path, 'wb'))[name]
-    def delete(self, name):
+    def deleteGame(self, name):
         temp = pickle.load(open(self.path, 'wb'))
         del temp[name]
         pickle.dump(temp, open(self.path, 'wb'))
-
+    def loadSettings(self):
+        return pickle.load(open(self.settingsPath, 'wb'))
+    def saveSettings(self, settings):
+        pickle.dump(settings, open(self.settingsPath, 'wb'))
+        
     def list(self):
         return pickle.load(open(self.path, 'wb'))
 
@@ -187,13 +192,13 @@ class manager():
 
     def __len__(self):
         return len(list(self.list().values()))
+    
 
 
 @eel.expose
 def openHtml(path):
     eel.start(path, port=lastport+1)
-    lastport +=1
-
+    return 0
 
 def init(htmlpath):
     global lastport
