@@ -162,47 +162,44 @@ class manager():
         temp = pickle.load(open(self.path, 'wb'))
         k = list(temp.keys())
         v = list(temp.values())
-        
+
         k.append(game.name)
         v.append(game)
-        
+
         temp = dict(zip(k, v))
         pickle.dump(temp, open(self.path, 'wb'))
-        
+
     def load(self, name):
         return pickle.load(open(self.path, 'wb'))[name]
     def delete(self, name):
         temp = pickle.load(open(self.path, 'wb'))
         del temp[name]
         pickle.dump(temp, open(self.path, 'wb'))
-        
+
     def list(self):
         return pickle.load(open(self.path, 'wb'))
-    
+
     def __str__(self):
         return {'settings': self.settings, 'path': self.path}
-    
+
     def __repr__(self):
         return self.__str__()
-    
+
     def __len__(self):
         return len(list(self.list().values()))
-    
-    
+
 
 @eel.expose
-def countrySelect():
-    eel.start('countrySelection.html', port=70)
-    pass
-
-@eel.expose
-def playGame():
-    eel.start('game.html', port=71)
-    pass
+def openHtml(path):
+    eel.start(path, port=lastport+1)
+    lastport +=1
 
 
+def init(htmlpath):
+    global lastport
+    lastport = 0
+    eel.init(htmlpath)
 
 
 if __name__ == '__main__':
-    eel.init('html')
-    eel.start('index.html', port=54)
+    init('html')
