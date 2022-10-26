@@ -1,21 +1,25 @@
 #conquest
-
+import eel
+import sys
+import pickle
 class player():
-    def __init__(self, control=[], name=None, bot=False, units=[]):
+    def __init__(self, control=[], name=None, bot=False, units=[], map=None):
         self.control = control
         self.name = name
         self.bot = bot
         self.score = 0
         self.units = units
+        self.game = game
+        self._map = map
 
 
     def __str__(self):
         return {'control': self.control, 'name': self.name, 'bot': self.bot, 'score': self.score}
 
     def init(self):
-        for i in range(len(g._map.cities)):
-            if g._map.cities[i].owner == self:
-                self.control.append(g._map.cities[i])
+        for i in range(len(self._map.cities)):
+            if self._map.cities[i].owner == self:
+                self.control.append(self._map.cities[i])
 
     def capture(self, city):
         self.control.append(city)
@@ -140,31 +144,65 @@ class map():
         return {'cities': self.cities}
 
 class game():
-    def __init__(self, players=[], map=None):
+    def __init__(self, players=[], map=None, name=None):
         self.players = players
         self._map = map
+        self.name = name
     def __str__(self):
         return {'players': self.players, 'map': self.map}
     def init(self):
         for i in range(len(self.players)):
-            g.players[i].init()
+            self.players[i].init()
 
-def test():
-    p = player(name='player1', units=[meleeSoldier(), rangedSoldier(), mortar()])
-    p2 = player(name='player2', units=[meleeSoldier(), rangedSoldier(), mortar()])
+class manager():
+    def __init__(self, settings={}, path='/games/games.pickle'):
+        self.settings = settings
+        self.path = sys.path[0] + path
+    def save(self, game):
+        temp = pickle.load(open(self.path, 'wb'))
+        k = list(temp.keys())
+        v = list(temp.values())
+        
+        k.append(game.name)
+        v.append(game)
+        
+        temp = dict(zip(k, v))
+        pickle.dump(temp, open(self.path, 'wb'))
+        
+    def load(self, name):
+        return pickle.load(open(self.path, 'wb'))[name]
+    def delete(self, name):
+        temp = pickle.load(open(self.path, 'wb'))
+        del temp[name]
+        pickle.dump(temp, open(self.path, 'wb'))
+        
+    def list(self):
+        return pickle.load(open(self.path, 'wb'))
+    
+    def __str__(self):
+        return {'settings': self.settings, 'path': self.path}
+    
+    def __repr__(self):
+        return self.__str__()
+    
+    def __len__(self):
+        return len(list(self.list().values()))
+    
+    
 
-    c = city(name='city1', owner=p, army=[meleeSoldier(), rangedSoldier(), mortar()], x=0, y=0)
-    c2 = city(name='city2', owner=None, army=[meleeSoldier(), rangedSoldier(), mortar()], x=0, y=0)
+@eel.expose
+def countrySelect():
+    eel.start('countrySelection.html', port=70)
+    pass
 
-    m = map(cities=[c, c2])
+@eel.expose
+def playGame():
+    eel.start('game.html', port=71)
+    pass
 
-    g = game(players=[p, p2], map=m)
 
-    g.init()
 
-    p.goForCapture(c2)
-
-    print(p.control)
 
 if __name__ == '__main__':
-    test()
+    eel.init('html')
+    eel.start('index.html', port=54)
