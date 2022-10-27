@@ -264,7 +264,6 @@ def listGamesValues():
 
 @eel.expose
 def listGamesKeys():
-    print(list(m.list().keys()))
     return list(m.list().keys())
 
 m.init()
