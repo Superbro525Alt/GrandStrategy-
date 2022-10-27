@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link   rel = "stylesheet"   href = "css/style.css">
+    <script type="text/javascript" src="/eel.js"></script>
+    <title>Country Selection</title>
+</head>
+<body>
+    <h1 class="heading">Game Name</h1>
+    <br>
+
+    <input id="name" class="nameInput">
+    <!--dropdown-->
+    <h1 class="heading">Select your Country</h1>
+    <br>
+
+    <select name="countries" class="countrySelection" id="country">
+      <option value="Australia">Australia</option>
+      <option value="US">United States</option>
+      <option value="NZ">New Zealand</option>
+      <option value="Russia">Russia</option>
+      <option value="China">China</option>
+      <option value="Japan">Japan</option>
+    </select>
+    <br>
+    <br>
+    <button type="button" onclick="next()" class="gameButton">Play!</button>
+    <br>
+    <button type="button", onclick="back()", class="gameButton">Back</button>
+    <script>
+      function back() {
+        window.location.href="index.html";
+      }
+
+      function next() {
+          window.location.href="game.html";
+          eel.makeGame(document.getElementById("name").value, document.getElementById("country").value);
+      }
+    </script>
+</body>
+</html>
