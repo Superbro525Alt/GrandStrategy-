@@ -4,22 +4,36 @@ import sys
 import pickle
 class player():
     def __init__(self, control=[], name=None, bot=False, units=[], map=None):
-        self.control = control
+        self.control = []
         self.name = name
         self.bot = bot
         self.score = 0
         self.units = units
         self.game = game
         self._map = map
+        for c in control:
+            self.control.append(c)
 
 
     def __str__(self):
         return {'control': self.control, 'name': self.name, 'bot': self.bot, 'score': self.score}
 
+    def get(self):
+        return self.__str__()
     def init(self):
         for i in range(len(self._map.cities)):
-            if self._map.cities[i].owner == self:
-                self.control.append(self._map.cities[i])
+            #print(self._map.cities[i].owner)
+            try:
+                if self._map.cities[i].owner.name == self.name:
+                    self.control.append(self._map.cities[i])
+                    self.score += self._map.cities[i].score
+            except AttributeError:
+                pass
+        for i in range(len(self.control)):
+            if self.control[i].owner.name != self.name:
+                self.score -= self.control[i].score
+                self.control.remove(self.control[i])
+
 
     def capture(self, city):
         self.control.append(city)
@@ -45,11 +59,23 @@ class player():
             city.army.append(units[i])
             self.units[i].city.army.remove(units[i])
 
-    def train(self, city, type=None):
+    def create(self, city, type=None):
         if type == None:
             self.units.append(troop(owner=self, city=city))
         else:
-            self.units.append(type(owner=self, city=city))
+            if type == 'melee':
+                self.units.append(meleeSoldier(owner=self, city=city))
+            elif type == 'ranged':
+                self.units.append(rangedSoldier(owner=self, city=city))
+            elif type == 'mortar':
+                self.units.append(mortar(owner=self, city=city))
+
+
+    def botTick(self):
+        if self.bot:
+            for i in range(len(self.control)):
+                if self.control[i].owner == self:
+                    print('bot ai here')
 class troop():
     def __init__(self, type=None, training=None, owner=None, city=None):
         self.type = type
@@ -57,6 +83,7 @@ class troop():
         self.owner = owner
         self.hp = 100
         self.city = city
+        self.city.army.append(self)
     
     def tick(self):
         if self.hp < 1:
@@ -102,7 +129,7 @@ class troop():
 
 class meleeSoldier(troop):
     def __init__(self, owner=None):
-        super().__init__(type='melee', training='soldier', owner=owner)
+        super().__init__(type='melee', training='meleeSoldier', owner=owner)
     def attack(self, otherUnit):
         super().attack(otherUnit)
 
@@ -154,6 +181,10 @@ class game():
         for i in range(len(self.players)):
             self.players[i].init()
 
+    def tick(self):
+        for player_ in self.players:
+            player_.botTick()
+
 class manager():
     def __init__(self, settings={}, path='/games/games.pickle', settingsPath='/games/settings.pickle'):
         self.settings = settings
@@ -180,7 +211,7 @@ class manager():
         return pickle.load(open(self.settingsPath, 'wb'))
     def saveSettings(self, settings):
         pickle.dump(settings, open(self.settingsPath, 'wb'))
-        
+
     def list(self):
         return pickle.load(open(self.path, 'wb'))
 
@@ -192,7 +223,7 @@ class manager():
 
     def __len__(self):
         return len(list(self.list().values()))
-    
+
 
 
 @eel.expose
@@ -207,4 +238,18 @@ def init(htmlpath):
 
 
 if __name__ == '__main__':
-    init('html')
+
+    c1 = city(name='c1', owner=None, x=0, y=0)
+    c2 = city(name='c2', owner=None, x=100, y=100)
+
+    m = map(cities=[c1, c2])
+
+    p1 = player(name='p1', bot=False, map=m)
+    p2 = player(name='p2', bot=True, map=m)
+
+    c1.owner = p1
+    c2.owner = p2
+
+    g = game(players=[p1, p2], map=m, name='test')
+
+    g.init()
