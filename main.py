@@ -3,8 +3,9 @@ import eel
 import sys
 import pickle
 class player():
-    def __init__(self, control=[], name=None, bot=False, units=[], map=None):
+    def __init__(self, control=[], name=None, bot=False, units=[], map=None, country=None):
         self.control = []
+        self.country = country
         self.name = name
         self.bot = bot
         self.score = 0
@@ -191,7 +192,7 @@ class manager():
         self.path = sys.path[0] + path
         self.settingsPath = sys.path[0] + settingsPath
     def saveGame(self, game):
-        temp = pickle.load(open(self.path, 'wb'))
+        temp = pickle.load(open(self.path, 'rb'))
         k = list(temp.keys())
         v = list(temp.values())
 
@@ -202,18 +203,18 @@ class manager():
         pickle.dump(temp, open(self.path, 'wb'))
 
     def loadGame(self, name):
-        return pickle.load(open(self.path, 'wb'))[name]
+        return pickle.load(open(self.path, 'rb'))[name]
     def deleteGame(self, name):
-        temp = pickle.load(open(self.path, 'wb'))
+        temp = pickle.load(open(self.path, 'rb'))
         del temp[name]
         pickle.dump(temp, open(self.path, 'wb'))
     def loadSettings(self):
-        return pickle.load(open(self.settingsPath, 'wb'))
+        return pickle.load(open(self.settingsPath, 'rb'))
     def saveSettings(self, settings):
         pickle.dump(settings, open(self.settingsPath, 'wb'))
 
     def list(self):
-        return pickle.load(open(self.path, 'wb'))
+        return pickle.load(open(self.path, 'rb'))
 
     def __str__(self):
         return {'settings': self.settings, 'path': self.path}
@@ -224,32 +225,53 @@ class manager():
     def __len__(self):
         return len(list(self.list().values()))
 
+    def createGame(self, name, players, map):
+        self.saveGame(game(name=name, players=players, map=map))
+        return self.loadGame(name)
+
+    def init(self):
+        try:
+            pickle.load(open(self.path, 'rb'))
+        except:
+            pickle.dump({}, open(self.path, 'wb'))
 
 
 @eel.expose
 def openHtml(path):
-    eel.start(path, port=lastport+1)
+    eel.start(path, port=60)
     return 0
+
 
 def init(htmlpath):
     global lastport
     lastport = 0
     eel.init(htmlpath)
 
+m = manager()
 
-if __name__ == '__main__':
+@eel.expose
+def makeGame(name, country=None, map=map([city(name='c1', x=0, y=0)])):
+    print('making')
+    return m.createGame(name, [player(name='p1', country=country)], map)
 
-    c1 = city(name='c1', owner=None, x=0, y=0)
-    c2 = city(name='c2', owner=None, x=100, y=100)
+@eel.expose
+def loadGame(name):
+    return m.loadGame(name)
 
-    m = map(cities=[c1, c2])
+@eel.expose
+def listGamesValues():
+    return list(m.list().values())
 
-    p1 = player(name='p1', bot=False, map=m)
-    p2 = player(name='p2', bot=True, map=m)
+@eel.expose
+def listGamesKeys():
+    print(list(m.list().keys()))
+    return list(m.list().keys())
 
-    c1.owner = p1
-    c2.owner = p2
+m.init()
+print(m.list())
+init('html')
+openHtml('index.html')
 
-    g = game(players=[p1, p2], map=m, name='test')
 
-    g.init()
+
+
