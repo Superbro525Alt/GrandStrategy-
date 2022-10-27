@@ -1,0 +1,64 @@
+.playButton {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    position: relative;
+    color: white;
+    background-color: black;
+}
+
+.playButton:hover {
+    color: black;
+    background-color: white;
+}
+
+.heading {
+    text-align: center;
+    font-size: 50px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    margin: 0;
+    padding: 0;
+}
+
+.desc {
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    margin: 0;
+    padding: 0;
+}
+
+.countrySelection {
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    margin: 0;
+    padding: 5px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+
+}
+
+.gameButton {
+    width: 100px;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    position: relative;
+}
+
+.nameInput {
+    width: 200px;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    position: relative;
+}
