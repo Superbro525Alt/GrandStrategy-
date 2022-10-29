@@ -1,37 +1,21 @@
 <!DOCTYPE html>
 
-<html   lang = "en"> 
-   <head> 
-     <meta   charset = "utf-8"> 
-     <!--include css-->
-       <link   rel = "stylesheet"   href = "css/style.css">
-       <script type="text/javascript" src="/eel.js"></script>
+<html lang="en">
 
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="text/javascript" src="/eel.js"></script>
+  <title>Game</title>
+</head>
 
+<body>
+  <div id="mainMenu">
+    <h1 id="mainTitle">Game</h1>
+    <button id="mainStart">Start Game</button>
+    <button id="mainSettings">Settings</button>
+    <button id="mainQuit">Quit</button>
+  </div>
+</body>
 
-     <title>Game</title> 
-   </head>
-   <body>
-        <h1 class="heading">GAME NAME</h1>
-        <p class="desc">idk description maybe</p>
-        <br>
-        <button class="gameButton" onclick="next()">New Game</button>
-        <br>
-        <button class="gameButton" onclick="load()">Load Game</button>
-        <br>
-        <button class="gameButton">Settings</button>
-        <br>
-        <button class="gameButton">Exit</button>
-
-    <script>
-      function next() {
-        window.location.href="countrySelection.html";
-      }
-      function load() {
-        window.location.href="loadGame.html";
-      }
-    </script>
-
-   </body>
- </html>
-
+</html>
