@@ -5,17 +5,19 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/style.css">
-  <script type="text/javascript" src="/eel.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
   <title>Game</title>
 </head>
 
 <body>
-  <div id="mainMenu">
-    <h1 id="mainTitle">Game</h1>
-    <div id="mainMenuButtons">
-      <button id="mainStart">Start Game</button>
-      <button id="mainLoad">Load Game</button>
-      <button id="mainSettings">Settings</button>
+  <div id="mainMenu" class="menu">
+    <div id="mainTitleContainer">
+      <h1 id="mainTitle">Game</h1>
+    </div>
+    <div id="mainMenuButtonContainer">
+      <button id="mainLoad" class="mainMenuButton">Load Game</button>
+      <button id="mainStart" class="mainMenuButton">Start Game</button>
+      <button id="mainSettings" class="mainMenuButton">Settings</button>
     </div>
     <button id="mainQuit">Quit</button>
 </body>
