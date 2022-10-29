@@ -5,11 +5,17 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/style.css">
-  <script type="text/javascript" src="js/index.js"></script>
   <title>Game</title>
 </head>
 
 <body>
+  <div id="quitMenu">
+    <div id="quitMenuContent">
+      <h1 id="quitCheck">Are you sure you want to quit?</h1>
+      <button id="quitYes" class="quitButton">Yes</button>
+      <button id="quitNo" class="quitButton">No</button>
+    </div>
+  </div>
   <div id="mainMenu" class="menu">
     <div id="mainTitleContainer">
       <h1 id="mainTitle">Game</h1>
@@ -20,6 +26,8 @@
       <button id="mainSettings" class="mainMenuButton">Settings</button>
     </div>
     <button id="mainQuit">Quit</button>
+  </div>
+  <script type="text/javascript" src="js/index.js"></script>
 </body>
 
 </html>
